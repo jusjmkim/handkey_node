@@ -3,9 +3,10 @@ var express = require('express')
     , path = require('path')
     , port = process.env.PORT || 8080
     , app = express()
-    , mongo = require('mongodb');
+    , mongo = require('mongodb')
+    , bodyParser = require('body-parser');
 
-var mongoUri = proccess.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/handkeyjs';
+var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/handkeyjs';
 
 var monk = require('monk')
     , db = monk(mongoUri)
@@ -96,5 +97,6 @@ function listenToServer() {
 }
 
 (function() {
+  console.log('Server is running!');
   listenToServer();
 })();
