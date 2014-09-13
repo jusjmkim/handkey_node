@@ -60,7 +60,7 @@ app.get('/', function(req, res) {
     check_computer_input(data, res);
     setTimeout(function() {
       res.json({});
-    }), 30000);
+    }, 30000);
   }
 });
 
