@@ -1,19 +1,15 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongo = require('mongodb');
+var express = require('express')
+    , http = require('http')
+    , path = require('path')
+    , port = process.env.PORT || 8080
+    , app = express()
+    , mongo = require('mongodb');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
-var app = express();
 var mongoUri = proccess.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/handkeyjs';
 
 var monk = require('monk')
-    , db = monk(mongoUri);
+    , db = monk(mongoUri)
+    , collection = db.get('serialNumbers');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,19 +18,11 @@ app.engine('html', require('ejs').renderFile);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-  req.db = db;
-  next();
-});
-
-app.use('/', routes);
-app.use('/serial_number', routes);
+var server = http.createServer(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -67,5 +55,46 @@ app.use(function(err, req, res, next) {
     });
 });
 
+app.get('/', function(req, res) {
+  res.on('data', function(data) {
+    check_computer_input(data, res);
+    setTimeout(function() {
+      res.json({});
+    }), 30000);
+  }
+});
 
-module.exports = app;
+function check_computer_input(data, res) {
+  var data_json = JSON.parse(data);
+  var randomNumber = randomNumber();
+
+  // not first time computer connects
+  if (data_json.serial_number !== "undefined") {
+    parseToJson('computer_number', randomNumber, res);
+    collection.insert({
+      randomNumber: data_json.serial_number
+    });
+  // not first time computer connects
+  } else {
+    collection.find().success(function(computer_serials) {
+      parseToJson('serial_number', computer_serials[randomNumber], res); 
+    });
+  }
+}
+
+function parseToJson(key, value, res) {
+  var json_data = {key: value};
+  res.json(json_data);
+}
+
+function randomNumber() {
+  return Math.random() * (1000 - 1) + 1;
+}
+
+function listenToServer() {
+  server.listen(port);
+}
+
+(function() {
+  listenToServer();
+})();
