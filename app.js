@@ -61,7 +61,7 @@ app.get('/', function(req, res) {
     setTimeout(function() {
       res.json({});
     }, 30000);
-  }
+  });
 });
 
 function check_computer_input(data, res) {
