@@ -12,6 +12,9 @@ var users = require('./routes/users');
 var app = express();
 var mongoUri = proccess.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/handkeyjs';
 
+var monk = require('monk')
+    , db = monk(mongoUri);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -26,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
-//  req.db = db;
+  req.db = db;
   next();
 });
 

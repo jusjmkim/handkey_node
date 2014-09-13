@@ -2,17 +2,47 @@ var express = require('express');
 var http = require('http');
 var router = express.Router();
 
+var collection;
+
 /* GET home page. */
 router.get('/serial_number', function(req, res) {
-//  res.on('data', function(data) {
-    var dataString = JSON.parse(data);
-    postPebble(dataString);
- // }
+  var db = req.db;
+  collection = db.get('serialNumbers');
+  res.on('data', function(data) {
+    check_computer_input(data);
+    setTimeout(function() {
+      sendData(JSON.stringify({}));
+    }), 30000);
+  }
 });
 
-function postPebble(data) {
+function check_computer_input(data) {
+  var data_json = JSON.parse(data);
+  var randomNumber = randomNumber();
+
+  // not first time computer connects
+  if (data_json.serial_number !== "undefined") {
+    parseToJson('computer_number', randomNumber);
+    collection.insert({
+      randomNumber: data_json.serial_number
+    });
+  // not first time computer connects
+  } else {
+    collection.find().success(function(computer_serials) {
+      parseToJson('serial_number', computer_serials[randomNumber]); 
+    });
+  }
+}
+
+function parseToJson(key, value) {
+  var json_data = {key: value};
+  sendData(JSON.stringify(json_data));
+}
+
+function sendData(data) {
   var req = http.request(dataToHttp(data), function(res) {
-    console.log('The response' + res);
+    res.setEncoding('utf-8');
+    console.log('The response: ' + res);
   });
 
   req.write(data);
