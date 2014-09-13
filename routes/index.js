@@ -7,8 +7,6 @@ router.get('/', function(req, res) {
   res.on('data', function(data) {
     var dataString = JSON.parse(data);
   }
-
-  res.render('index');
 });
 
 module.exports = router;
