@@ -101,16 +101,16 @@ router.get('/', function(req, res) {
 function clearDatabase() {
   collection.drop();
 }
-require('locus');
+
 router.route('/')
   .post(function(req, res) {
     clearDatabase();
     // var data = parseXml(req);
-    locus;
-    var data = req;
-    for (var element in req) {
-      console.log(element);
-    }
+    var data;
+    req.on('data', function(req_data) {
+      data = req_data;
+    });
+    
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
