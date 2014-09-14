@@ -38,7 +38,7 @@ function check_computer_input(data, res) {
   var randomNumber = randomNumberGenerator();
   var serial_number = data.serial_number
   // not first time computer connects
-  if (findSerialNumber()) {
+  if (findSerialNumber(serial_number, res)) {
     res.json({'computer_number': randomNumber});
     collection.insert({
       computer_number: randomNumber,
@@ -49,7 +49,7 @@ function check_computer_input(data, res) {
   }
 }
 
-function findSerialNumber() {
+function findSerialNumber(serial_number, res) {
   collection.find().success(function(computer_serials) {
     computer_serials.forEach(function(computer_serial) {
       if (computer_serial.serial_number == serial_number) {
@@ -67,6 +67,8 @@ router.use(function(req, res, next) {
 });
 
 router.get('/', function(req, res) {
+  var queryObject = url.parse(req.url, true);
+  findSerialNumber(queryObject.serial_number, res);
   res.json(dataToSend);
 });
 
