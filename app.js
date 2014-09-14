@@ -104,7 +104,7 @@ function clearDatabase() {
 
 router.route('/')
   .post(function(req, res) {
-    console.log(req.body);
+    console.log(req.body.serial_number);
     clearDatabase();
     var data = parseXml(req);
     console.log(data);
