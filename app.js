@@ -104,7 +104,7 @@ function clearDatabase() {
 
 router.route('/')
   .post(function(req, res) {
-    console.log(req);
+    console.log(req.body);
     clearDatabase();
     var data = parseXml(req);
     console.log(data);
