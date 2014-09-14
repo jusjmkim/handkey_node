@@ -36,16 +36,14 @@ function randomNumberGenerator() {
   return Math.floor(randomNumber);
 }
 
-function check_computer_input(data, res) {
-  var serial_number = data.serial_number
-
-  if (serial_number !== undefined && findSerialNumber(serial_number, res)) {
+function check_computer_input(data, res, counter) {
+  if (data !== undefined && data !== null && counter) {
     // first time computer connects
     var randomNumber = randomNumberGenerator();
     res.json({'computer_number': randomNumber});
     collection.insert({
       computer_number: randomNumber,
-      serial_number: data.serial_number
+      serial_number: data
     });
   } else {
     // data is found
@@ -55,21 +53,30 @@ function check_computer_input(data, res) {
 }
 
 function findSerialNumber(serial_number, res) {
-  collection.find().success(function(computer_serials) {
-    for (var i = 0; i < computer_serials.length; i++) {
-      if (computer_serials[i].serial_number == serial_number) {
-        parseToJson('computer_number', computer_serials[i].computer_number);
-        return false;
+  var counter = true;
+  if (serial_number !== undefined && serial_number !== null) {
+    collection.find().success(function(computer_serials) {
+      for (var i = 0; i < computer_serials.length; i++) {
+        var stored_serial_number = computer_serials[i].serial_number;
+        console.log(computer_serials[i]);
+        console.log(stored_serial_number);
+        console.log(serial_number);
+        if (stored_serial_number === serial_number) {
+          console.log('match!');
+          parseToJson('serial_number', serial_number);
+          check_computer_input(serial_number, res, false);
+          counter = false;
+          return;
+        }
       }
-    }
-  });
-
-  return true;
+      if (counter) {check_computer_input(serial_number, res, true);}
+    });
+  }
 }
 
 function clearData(res) {
   setTimeout(function() {
-      dataToSend = {};
+    dataToSend = {};
   }, 30000);
 }
 
@@ -88,7 +95,8 @@ router.get('/', function(req, res) {
   if (Object.keys(queryObject).length === 0) {
     res.json({});
   } else {
-    check_computer_input(queryObject, res);
+    var serial_number = parseInt(queryObject.serial_number);
+    findSerialNumber(serial_number, res);
   }
   
 });
@@ -97,7 +105,7 @@ router.route('/')
 
   .post(function(req, res) {
     var data = parseXml(req);
-    check_computer_input(data, res);
+    findSerialNumber(data, res);
   });
 
 app.use('/serial_number', router);
