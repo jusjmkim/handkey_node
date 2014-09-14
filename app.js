@@ -96,8 +96,6 @@ function clearDatabase() {
   collection.drop();
 }
 
-clearDatabase();
-
 router.route('/')
   .post(function(req, res) {
     var data = req.body.serial_number;
