@@ -7,10 +7,7 @@ var express = require('express')
     , bodyParser = require('body-parser')
     , router = express.Router();
 
-var dataToSend = {
-    computer_number: 123456789,
-    serial_number: 00000000
-  };
+var dataToSend = {};
 
 var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/handkeyjs';
 
@@ -28,10 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 function parseToJson(key, value, res) {
-  dataToSend = {
-    computer_number: 123456789,
-    serial_number: 00000000
-  };
+  dataToSend = {};
   dataToSend[key] = value;
 }
 
@@ -66,13 +60,6 @@ function check_computer_input(data, res) {
   }
 }
 
-function createSeedData() {
-  collection.insert({
-    computer_number: 123456789,
-    serial_number: 00000000
-  });
-}
-
 router.use(function(req, res, next) {
   next();
 });
@@ -94,7 +81,3 @@ router.route('/')
 app.use('/serial_number', router);
 
 app.listen(port);
-
-(function() {
-  createSeedData();
-})();
