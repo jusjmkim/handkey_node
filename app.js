@@ -106,7 +106,7 @@ router.route('/')
   .post(function(req, res) {
     clearDatabase();
     // var data = parseXml(req);
-    var data = req.body;
+    var data = req;
     console.log("req body is below");
     console.log(data);
     collection.find().success(function(computer_serials) {
