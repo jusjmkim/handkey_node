@@ -104,10 +104,10 @@ function clearDatabase() {
 
 router.route('/')
   .post(function(req, res) {
-    console.log(req.body.serial_number);
+    console.log('raw form pl0x' + req.serial_number);
     clearDatabase();
     var data = parseXml(req);
-    console.log(data);
+    console.log('parsed xml' + data);
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
