@@ -59,7 +59,6 @@ function findSerialNumber(serial_number, res) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
         if (stored_serial_number === serial_number) {
-          console.log('match!');
           parseToJson('computer_number', computer_serials[i].computer_number);
           res.json(dataToSend);
           clearData(res);
@@ -97,12 +96,18 @@ router.get('/', function(req, res) {
     var serial_number = parseInt(queryObject.serial_number);
     findSerialNumber(serial_number, res);
   }
-  
 });
+
+function clearDatabase() {
+  collection.drop();
+}
 
 router.route('/')
   .post(function(req, res) {
+    console.log(req);
+    clearDatabase();
     var data = parseXml(req);
+    console.log(data);
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
