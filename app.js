@@ -84,7 +84,12 @@ router.use(function(req, res, next) {
 
 router.get('/', function(req, res) {
   var queryObject = url.parse(req.url, true).query;
-  check_computer_input(queryObject, res);
+  if (Object.keys(queryObject).length === 0) {
+    res.json({});
+  } else {
+    check_computer_input(queryObject, res);
+  }
+  
 });
 
 router.route('/')
