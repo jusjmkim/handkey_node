@@ -38,28 +38,28 @@ function check_computer_input(data, res) {
   var randomNumber = randomNumberGenerator();
   var serial_number = data.serial_number
   // not first time computer connects
-  if (!isNaN(serial_number)) {
-    var firstTime = true;
-    collection.find().success(function(computer_serials) {
-      console.log(computer_serials);
-      computer_serials.forEach(function(computer_serial) {
-        if (computer_serial.serial_number == serial_number) {
-          parseToJson('computer_number', computer_serial.computer_number, res);
-          firstTime = false;
-        }
-      });
+  if (findSerialNumber()) {
+    res.json({'computer_number': randomNumber});
+    collection.insert({
+      computer_number: randomNumber,
+      serial_number: data.serial_number
     });
-
-    if (firstTime) {
-      res.json({'computer_number': randomNumber});
-      collection.insert({
-        computer_number: randomNumber,
-        serial_number: data.serial_number
-      });
-    } else {
-      res.json(dataToSend);
-    }
+  } else {
+    res.json(dataToSend);
   }
+}
+
+function findSerialNumber() {
+  collection.find().success(function(computer_serials) {
+    computer_serials.forEach(function(computer_serial) {
+      if (computer_serial.serial_number == serial_number) {
+        parseToJson('computer_number', computer_serial.computer_number, res);
+        return false;
+      }
+    });
+  });
+
+  return true;
 }
 
 router.use(function(req, res, next) {
