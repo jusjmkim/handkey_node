@@ -25,7 +25,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 function parseToJson(key, value, res) {
-  dataToSend = {};
+  dataToSend = {
+    computer_number: 123456789,
+    serial_number: 00000000
+  };
   dataToSend[key] = value;
 }
 
@@ -60,6 +63,13 @@ function check_computer_input(data, res) {
   }
 }
 
+function createSeedData() {
+  collection.insert({
+    computer_number: 123456789,
+    serial_number: 00000000
+  });
+}
+
 router.use(function(req, res, next) {
   next();
 });
@@ -81,3 +91,7 @@ router.route('/')
 app.use('/serial_number', router);
 
 app.listen(port);
+
+(function() {
+  createSeedData();
+})();
