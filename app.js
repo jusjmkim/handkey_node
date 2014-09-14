@@ -41,20 +41,18 @@ function check_computer_input(data, res) {
   if (!isNaN(data.serial_number)) {
     res.json({'computer_number': randomNumber})
     collection.insert({
-      computer_number: data.serial_number
+      computer_number: randomNumber,
+      serial_number: data.serial_number
     });
 
   // not first time computer connects
   } else if (!isNaN(data.computer_number)) {
     var computer_number = data.computer_number;
-    console.log(data);
-    console.log(computer_number);
     collection.find().success(function(computer_serials) {
       console.log(computer_serials);
       computer_serials.forEach(function(computer_serial) {
-        if (computer_serial.computer_number === computer_number) {
-          parseToJson('serial_number', computer_number, res);
-          console.log(dataToSend);
+        if (computer_serial.computer_number == computer_number) {
+          parseToJson('serial_number', computer_serial.serial_number, res);
         }
       });
       res.json(dataToSend);
