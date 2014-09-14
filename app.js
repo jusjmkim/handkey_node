@@ -38,15 +38,17 @@ function randomNumberGenerator() {
 function check_computer_input(data, res) {
   var randomNumber = randomNumberGenerator();
   var serial_number = data.serial_number
-  // not first time computer connects
+
   if (findSerialNumber(serial_number, res)) {
+    // first time computer connects
     res.json({'computer_number': randomNumber});
     collection.insert({
       computer_number: randomNumber,
       serial_number: data.serial_number
     });
   } else {
-    res.json(dataToSend);
+    // data is found
+    clearData(res);
   }
 }
 
@@ -63,6 +65,12 @@ function findSerialNumber(serial_number, res) {
   return true;
 }
 
+function clearData(res) {
+  setTimeout(function() {
+      dataToSend = {};
+  }, 30000);
+}
+
 router.use(function(req, res, next) {
   next();
 });
@@ -71,6 +79,7 @@ router.get('/', function(req, res) {
   var queryObject = url.parse(req.url, true).query;
   findSerialNumber(queryObject.serial_number, res);
   res.json(dataToSend);
+  clearData(res);
 });
 
 router.route('/')
@@ -78,9 +87,6 @@ router.route('/')
   .post(function(req, res) {
     var data = req.body;
     check_computer_input(data, res);
-    setTimeout(function() {
-      dataToSend = {};
-    }, 30000);
   });
 
 app.use('/serial_number', router);
