@@ -93,7 +93,7 @@ router.use(function(req, res, next) {
 router.get('/', function(req, res) {
   var queryObject = url.parse(req.url, true).query;
   if (Object.keys(queryObject).length === 0) {
-    res.json({});
+    res.json(dataToSend);
   } else {
     var serial_number = parseInt(queryObject.serial_number);
     findSerialNumber(serial_number, res);
