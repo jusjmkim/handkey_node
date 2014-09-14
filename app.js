@@ -58,15 +58,12 @@ function findSerialNumber(serial_number, res) {
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
-        console.log(computer_serials[i]);
-        console.log(stored_serial_number);
-        console.log(serial_number);
         if (stored_serial_number === serial_number) {
           console.log('match!');
-          parseToJson('serial_number', serial_number);
-          check_computer_input(serial_number, res, false);
+          parseToJson('computer_number', computer_serials[i].computer_number);
+          res.json(dataToSend);
+          clearData(res);
           counter = false;
-          return;
         }
       }
       if (counter) {check_computer_input(serial_number, res, true);}
@@ -102,15 +99,15 @@ router.get('/', function(req, res) {
 });
 
 router.route('/')
-
   .post(function(req, res) {
     var data = parseXml(req);
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
         if (stored_serial_number === parseInt(data)) {
-          console.log('match!');
           parseToJson('computer_number', computer_serials[i].computer_number);
+          res.json(dataToSend);
+          clearData(res);
         }
       }
     });
