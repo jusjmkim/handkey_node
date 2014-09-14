@@ -78,9 +78,11 @@ function clearData(res) {
 }
 
 function parseXml(req) {
-  return parseString(req.body, function(err, result) {
-    return result;
+  var data;
+  parseString(req.body, function(err, result) {
+    data = result;
   });
+  return data;
 }
 
 router.use(function(req, res, next) {
