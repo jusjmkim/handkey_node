@@ -109,9 +109,9 @@ router.route('/')
     var data;
     req.on('data', function(req_data) {
       data = req_data;
+      console.log(req_data);
     });
     console.log("data below");
-    console.log(data);
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
