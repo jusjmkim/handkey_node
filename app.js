@@ -78,7 +78,7 @@ function clearData(res) {
 
 function parseXml(req) {
   var data;
-  parseString(req.body, function(err, result) {
+  parseString(req, function(err, result) {
     data = result;
   });
   return data;
@@ -104,7 +104,7 @@ function clearDatabase() {
 
 router.route('/')
   .post(function(req, res) {
-    console.log('raw form pl0x' + req.serial_number);
+    console.log('raw form pl0x' + req);
     clearDatabase();
     var data = parseXml(req);
     console.log('parsed xml' + data);
