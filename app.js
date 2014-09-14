@@ -26,7 +26,7 @@ app.engine('html', require('ejs').renderFile);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-function parseToJson(key, value, res) {
+function parseToJson(key, value) {
   dataToSend = {};
   dataToSend[key] = value;
 }
@@ -37,11 +37,11 @@ function randomNumberGenerator() {
 }
 
 function check_computer_input(data, res) {
-  var randomNumber = randomNumberGenerator();
   var serial_number = data.serial_number
 
-  if (findSerialNumber(serial_number, res)) {
+  if (serial_number !== undefined && findSerialNumber(serial_number, res)) {
     // first time computer connects
+    var randomNumber = randomNumberGenerator();
     res.json({'computer_number': randomNumber});
     collection.insert({
       computer_number: randomNumber,
@@ -49,18 +49,19 @@ function check_computer_input(data, res) {
     });
   } else {
     // data is found
+    res.json({});
     clearData(res);
   }
 }
 
 function findSerialNumber(serial_number, res) {
   collection.find().success(function(computer_serials) {
-    computer_serials.forEach(function(computer_serial) {
-      if (computer_serial.serial_number == serial_number) {
-        parseToJson('computer_number', computer_serial.computer_number, res);
+    for (var i = 0; i < computer_serials.length; i++) {
+      if (computer_serials[i].serial_number == serial_number) {
+        parseToJson('computer_number', computer_serials[i].computer_number);
         return false;
       }
-    });
+    }
   });
 
   return true;
