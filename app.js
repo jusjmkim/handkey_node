@@ -76,13 +76,13 @@ function clearData(res) {
   }, 30000);
 }
 
-function parseXml(req) {
-  var data;
-  parseString(req, function(err, result) {
-    data = result;
-  });
-  return data;
-}
+// function parseXml(req) {
+//   var data;
+//   parseString(req, function(err, result) {
+//     data = result;
+//   });
+//   return data;
+// }
 
 router.use(function(req, res, next) {
   next();
@@ -105,8 +105,9 @@ function clearDatabase() {
 router.route('/')
   .post(function(req, res) {
     clearDatabase();
-    var data = parseXml(req);
-    console.log("parsed xml is below");
+    // var data = parseXml(req);
+    var data = req.body;
+    console.log("req body is below");
     console.log(data);
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
