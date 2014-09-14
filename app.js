@@ -107,6 +107,7 @@ router.route('/')
     clearDatabase();
     // var data = parseXml(req);
     var data = req.body.serial_number;
+    console.log(data);
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
