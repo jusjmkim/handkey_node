@@ -78,14 +78,6 @@ function clearData(res) {
   }, 30000);
 }
 
-// function parseXml(req) {
-//   var data;
-//   parseString(req, function(err, result) {
-//     data = result;
-//   });
-//   return data;
-// }
-
 router.use(function(req, res, next) {
   next();
 });
@@ -104,21 +96,11 @@ function clearDatabase() {
   collection.drop();
 }
 
+clearDatabase();
+
 router.route('/')
   .post(function(req, res) {
-    // var data = parseXml(req);
     var data = req.body.serial_number;
-    console.log(data);
-    // collection.find().success(function(computer_serials) {
-    //   for (var i = 0; i < computer_serials.length; i++) {
-    //     var stored_serial_number = computer_serials[i].serial_number;
-    //     if (stored_serial_number === parseInt(data)) {
-    //       parseToJson('computer_number', computer_serials[i].computer_number);
-    //       res.json(dataToSend);
-    //       clearData(res);
-    //     }
-    //   }
-    // });
     findSerialNumber(parseInt(data), res);
   });
 
