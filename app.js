@@ -105,7 +105,15 @@ router.route('/')
 
   .post(function(req, res) {
     var data = parseXml(req);
-    findSerialNumber(data, res);
+    collection.find().success(function(computer_serials) {
+      for (var i = 0; i < computer_serials.length; i++) {
+        var stored_serial_number = computer_serials[i].serial_number;
+        if (stored_serial_number === parseInt(data)) {
+          console.log('match!');
+          parseToJson('computer_number', computer_serials[i].computer_number);
+        }
+      }
+    });
   });
 
 app.use('/serial_number', router);
