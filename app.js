@@ -111,7 +111,7 @@ router.route('/')
       data = req_data;
       console.log(req_data);
     });
-    req.on('end' function() {
+    req.on('end', function() {
       console.log(data);
     }); 
     console.log("data below");
