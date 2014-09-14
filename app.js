@@ -6,7 +6,8 @@ var express = require('express')
     , mongo = require('mongodb')
     , bodyParser = require('body-parser')
     , router = express.Router()
-    , url = require('url');
+    , url = require('url')
+    , parseString = require('xml2js').parseString;
 
 var dataToSend = {};
 
@@ -71,21 +72,25 @@ function clearData(res) {
   }, 30000);
 }
 
+function parseXml(req) {
+  return parseString(req.body, function(err, result) {
+    return result;
+  });
+}
+
 router.use(function(req, res, next) {
   next();
 });
 
 router.get('/', function(req, res) {
   var queryObject = url.parse(req.url, true).query;
-  findSerialNumber(queryObject.serial_number, res);
-  res.json(dataToSend);
-  clearData(res);
+  check_computer_input(queryObject, res);
 });
 
 router.route('/')
 
   .post(function(req, res) {
-    var data = req.body;
+    var data = parseXml(req);
     check_computer_input(data, res);
   });
 
