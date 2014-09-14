@@ -60,6 +60,7 @@ function findSerialNumber(serial_number, res) {
         var stored_serial_number = computer_serials[i].serial_number;
         if (stored_serial_number === serial_number) {
           console.log("found in database");
+          console.log(computer_serials[i].computer_number);
           parseToJson('computer_number', computer_serials[i].computer_number);
           res.json(dataToSend);
           clearData(res);
