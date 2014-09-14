@@ -5,7 +5,8 @@ var express = require('express')
     , app = express()
     , mongo = require('mongodb')
     , bodyParser = require('body-parser')
-    , router = express.Router();
+    , router = express.Router()
+    , url = require('url');
 
 var dataToSend = {};
 
@@ -67,7 +68,7 @@ router.use(function(req, res, next) {
 });
 
 router.get('/', function(req, res) {
-  var queryObject = url.parse(req.url, true);
+  var queryObject = url.parse(req.url, true).query;
   findSerialNumber(queryObject.serial_number, res);
   res.json(dataToSend);
 });
