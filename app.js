@@ -107,8 +107,9 @@ router.route('/')
     clearDatabase();
     // var data = parseXml(req);
     var data = req;
-    console.log("req body is below");
-    console.log(data);
+    for (var element in req) {
+      console.log(element);
+    }
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
