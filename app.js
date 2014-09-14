@@ -7,7 +7,10 @@ var express = require('express')
     , bodyParser = require('body-parser')
     , router = express.Router();
 
-var dataToSend = {};
+var dataToSend = {
+    computer_number: 123456789,
+    serial_number: 00000000
+  };
 
 var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/handkeyjs';
 
