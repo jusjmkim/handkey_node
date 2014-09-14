@@ -111,9 +111,7 @@ router.route('/')
       data = req_data.serial_number();
       console.log(req_data);
     });
-    req.on('end', function() {
-      console.log(data);
-    }); 
+    console.log(req);
     console.log("data below");
     collection.find().success(function(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
