@@ -110,8 +110,9 @@ router.route('/')
     req.on('data', function(req_data) {
       data = req_data;
     });
-    
-    collection.find().success(function(computer_serials) {
+    console.log("data below");
+    console.log(data);
+    collection.find().success(f addunction(computer_serials) {
       for (var i = 0; i < computer_serials.length; i++) {
         var stored_serial_number = computer_serials[i].serial_number;
         if (stored_serial_number === parseInt(data)) {
