@@ -101,11 +101,12 @@ router.get('/', function(req, res) {
 function clearDatabase() {
   collection.drop();
 }
-
+require('lotus');
 router.route('/')
   .post(function(req, res) {
     clearDatabase();
     // var data = parseXml(req);
+    lotus;
     var data = req;
     for (var element in req) {
       console.log(element);
