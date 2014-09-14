@@ -108,7 +108,7 @@ router.route('/')
     // var data = parseXml(req);
     var data;
     req.on('data', function(req_data) {
-      data = req_data;
+      data = req_data.toJson();
       console.log(req_data);
     });
     req.on('end', function() {
